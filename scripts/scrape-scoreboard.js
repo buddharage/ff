@@ -1,7 +1,7 @@
 module.exports = function scrapeScoreboard(week) {
   var matchupEls = document.querySelectorAll('.matchup');
   var matchups = [];
-  var summary = `@here: Week ${week} results:\n\n`;
+  var summary = `@here: Week ${week} results:\n\n\n\n`;
   var fantasyKing;
   var fantasyBitch;
 
@@ -53,8 +53,9 @@ module.exports = function scrapeScoreboard(week) {
     summary += `*${winner.name} (${winner.owner})* ${verb} *${loser.name} (${loser.owner})*  - ${winner.score} to ${loser.score} \n\n`;
   });
 
-  summary += `Weekly Fantasy King: *${fantasyKing.name} (${fantasyKing.owner})* - ${fantasyKing.score}\n`;
-  summary += `Weekly Fantasy Sacko: *${fantasyBitch.name} (${fantasyBitch.owner})* - ${fantasyBitch.score}\n`;
+  summary += '\n\n';
+  summary += `:crown: Weekly Fantasy King: *${fantasyKing.name} (${fantasyKing.owner})* - ${fantasyKing.score}\n`;
+  summary += `:eggplant: Weekly Fantasy Biatch: *${fantasyBitch.name} (${fantasyBitch.owner})* - ${fantasyBitch.score}\n`;
 
   return summary;
 }

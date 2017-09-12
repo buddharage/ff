@@ -4,6 +4,12 @@ const config = require('./config');
 const scrapeScoreboard = require('./scripts/scrape-scoreboard');
 const login = require('./scripts/login');
 
+if (!process.argv[2] || parseInt(process.argv[2], 10) === 'NaN') {
+    throw('Week number required');
+}
+
+const week = process.argv[2];
+
 async function run() {
     const browser = await puppeteer.launch({
         // headless: false
@@ -11,7 +17,7 @@ async function run() {
 
     const page = await browser.newPage();
 
-    await page.goto(`http://games.espn.com/ffl/signin?redir=http%3A%2F%2Fgames.espn.com%2Fffl%2Fscoreboard%3FleagueId%3D${config.leagueId}%26matchupPeriodId%3D${config.week}`);
+    await page.goto(`http://games.espn.com/ffl/signin?redir=http%3A%2F%2Fgames.espn.com%2Fffl%2Fscoreboard%3FleagueId%3D${config.leagueId}%26matchupPeriodId%3D${week}`);
 
     const mainFrame = page.mainFrame();
 
@@ -29,7 +35,7 @@ async function run() {
         const navigation = await page.waitForNavigation();
 
         if (navigation.url.match('scoreboard')) {
-            const results = await page.evaluate(scrapeScoreboard, config.week);
+            const results = await page.evaluate(scrapeScoreboard, week);
 
             console.log(results);
 
