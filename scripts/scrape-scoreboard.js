@@ -54,8 +54,8 @@ module.exports = function scrapeScoreboard(week) {
   });
 
   summary += '\n\n';
-  summary += `:crown: Weekly Fantasy King: *${fantasyKing.name} (${fantasyKing.owner})* - ${fantasyKing.score}\n`;
-  summary += `:eggplant: Weekly Fantasy Biatch: *${fantasyBitch.name} (${fantasyBitch.owner})* - ${fantasyBitch.score}\n`;
+  summary += `:crown: This Week's Fantasy King: *${fantasyKing.name} (${fantasyKing.owner})* - ${fantasyKing.score}\n`;
+  summary += `:eggplant: This Week's Fantasy Biatch: *${fantasyBitch.name} (${fantasyBitch.owner})* - ${fantasyBitch.score}\n`;
 
   return summary;
 }
