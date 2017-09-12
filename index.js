@@ -1,3 +1,4 @@
+const fetch = require('node-fetch');
 const puppeteer = require('puppeteer');
 const config = require('./config');
 const scrapeScoreboard = require('./scripts/scrape-scoreboard');
@@ -5,7 +6,7 @@ const login = require('./scripts/login');
 
 async function run() {
     const browser = await puppeteer.launch({
-        headless: false
+        // headless: false
     });
 
     const page = await browser.newPage();
@@ -32,9 +33,26 @@ async function run() {
 
             console.log(results);
 
-            browser.close();
-            
-            process.exitCode = 0;
+            const payload = {
+                emojii: config.slack.emojii,
+                username: config.slack.username,
+                text: results
+            };
+
+            // Send to Slack
+            fetch(config.slack.hookUrl, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            })
+                .then((res) => res)
+                .then((data) => {
+                    browser.close();
+                    process.exitCode = 0;
+                })
+                .catch((e) => {
+                    browser.close();
+                    process.exitCode = 1;
+                })
         }
     } else {
         browser.close();

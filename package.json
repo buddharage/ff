@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/buddharage/ff#readme",
   "dependencies": {
+    "node-fetch": "^1.7.3",
     "puppeteer": "^0.10.2"
   }
 }
