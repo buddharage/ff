@@ -1,0 +1,22 @@
+{
+  "name": "ff",
+  "version": "1.0.0",
+  "description": "Fantasy football recap scraper for ESPN",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/buddharage/ff.git"
+  },
+  "author": "Thai Le",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/buddharage/ff/issues"
+  },
+  "homepage": "https://github.com/buddharage/ff#readme",
+  "dependencies": {
+    "puppeteer": "^0.10.2"
+  }
+}

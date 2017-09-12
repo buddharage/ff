@@ -1,0 +1,50 @@
+const puppeteer = require('puppeteer');
+const config = require('./config');
+const scrapeScoreboard = require('./scripts/scrape-scoreboard');
+const login = require('./scripts/login');
+
+async function run() {
+    const browser = await puppeteer.launch({
+        headless: false
+    });
+
+    const page = await browser.newPage();
+
+    await page.goto(`http://games.espn.com/ffl/signin?redir=http%3A%2F%2Fgames.espn.com%2Fffl%2Fscoreboard%3FleagueId%3D${config.leagueId}%26matchupPeriodId%3D${config.week}`);
+
+    const mainFrame = page.mainFrame();
+
+    let loginFrame = null;
+
+    for (let frame of mainFrame.childFrames()) {
+        if (frame.url().match('https://cdn.registerdisney.go.com')) {
+            loginFrame = frame;
+        }
+    }
+
+    if (loginFrame) {
+        const loggedIn = await loginFrame.evaluate(login, config.username, config.password);
+
+        const navigation = await page.waitForNavigation();
+
+        if (navigation.url.match('scoreboard')) {
+            const results = await page.evaluate(scrapeScoreboard, config.week);
+
+            console.log(results);
+
+            browser.close();
+            
+            process.exitCode = 0;
+        }
+    } else {
+        browser.close();
+        process.exitCode = 1;
+    }
+}
+
+try {
+    run();
+} catch(e) {
+    throw(e);
+    process.exitCode = 1;
+}
