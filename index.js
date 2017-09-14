@@ -10,6 +10,21 @@ if (!process.argv[2] || parseInt(process.argv[2], 10) === 'NaN') {
 
 const week = process.argv[2];
 
+function sendToSlack(payload) {
+    // Send to Slack
+    return fetch(config.slack.hookUrl, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+    })
+        .then((res) => res)
+        .then((data) => {
+            process.exitCode = 0;
+        })
+        .catch((e) => {
+            process.exitCode = 1;
+        })
+}
+
 async function run() {
     const browser = await puppeteer.launch({
         // headless: false
@@ -45,20 +60,7 @@ async function run() {
                 text: results
             };
 
-            // Send to Slack
-            fetch(config.slack.hookUrl, {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            })
-                .then((res) => res)
-                .then((data) => {
-                    browser.close();
-                    process.exitCode = 0;
-                })
-                .catch((e) => {
-                    browser.close();
-                    process.exitCode = 1;
-                })
+            sendToSlack(payload);
         }
     } else {
         browser.close();
